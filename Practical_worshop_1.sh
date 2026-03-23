@@ -9,3 +9,5 @@ gpg --armor --export
 gpg --list-secret-keys --keyid-format=long #para listar las llaves privadas
 # 23909E79DC4B0DF0
 gpg --armor --export-secret-keys # para especificar el hash de las llaves
+gpg --import JENNIMICOMPA_llave_publica.asc # compartir llave
+gpg --list-keys # listar llaves de mi compa
