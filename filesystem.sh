@@ -3,4 +3,5 @@ pwd # Print word directory / imprime la ruta en la que estoy en ese momento. - P
 cd / # change directory  - lleva a la carpeta principal (raíz) del sistema
 ls -F # muestra los archivos indicando su tipo /  Displays files indicating their type.
 ls -i # muestra los archivos junto con su identificador interno del sistema (inodo) / It displays the files along with their internal system identifier (inode).
-
+echo "hola" >test.txt  # crea el archivo test.txt con el contenido "hola". / Create a new txt. file
+stat test.txt # da todos los datos técnicos del archivo test.txt / Provides all the technical data of the test.txt file.

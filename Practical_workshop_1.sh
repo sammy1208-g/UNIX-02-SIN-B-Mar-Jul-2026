@@ -21,3 +21,4 @@ gpg --decrypt JMICOMPA_doc_cifrado.txt # Decrypt the document sent by our friend
 gpg --output doc_no_cifrado_firmado.txt --clearsign doc_no_cifrado.txt # Firmar archivo 
 ls # View files
 cat doc_no_cifrado_firmado.txt # Allows you to view the file contents (including the signature)
+
