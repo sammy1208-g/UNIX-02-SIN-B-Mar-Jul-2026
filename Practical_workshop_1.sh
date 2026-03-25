@@ -17,5 +17,5 @@ cat doc_no_cifrado.txt # mostrar el contenido de un archivo de texto directament
 gpg --output doc_cifrado.txt --encrypt --recipient condorjeniffer0@gmail.com doc_no_cifrado.txt # usamos el hash o correo de la clave publica de nuestro compa para cifrar el documento
 gpg --decrypt JMICOMPA_doc_cifrado.txt # decifrado el documento enviado por nuestro compa
 gpg --output doc_no_cifrado_firmado.txt --clearsign doc_no_cifrado.txt
-ls 
-cat doc_no_cifrado_firmado.txt
+ls # ver archivos
+cat doc_no_cifrado_firmado.txt # permite ver contenido del archivo (incluyendo la firma)
