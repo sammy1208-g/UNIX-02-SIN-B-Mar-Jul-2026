@@ -1,22 +1,23 @@
-uname -a # Da la información completa del sistema operativo  / respuesta: Linux codespaces-dd4d4b 6.8.0-1044-azure #50~22.04.1-Ubuntu SMP Wed Dec  3 15:13:22 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
-which gpg # Nos dice en qué ruta está instalado GPG / respuesta: /usr/bin/gpg
-gpg --version # # Muestra la versión de GPG instalada / respuesta : gpg (GnuPG) 2.4.4 ....
+uname -a # Provides complete operating system information  / respuesta: Linux codespaces-dd4d4b 6.8.0-1044-azure #50~22.04.1-Ubuntu SMP Wed Dec  3 15:13:22 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+which gpg # Tells us where GPG is installed / respuesta: /usr/bin/gpg
+gpg --version # # Displays the installed GPG version / respuesta : gpg (GnuPG) 2.4.4 ....
 gpg --full-generate-key # generate key
 gpg --list-keys # List keys
-gpg --armor --export chamorrosamy525@gmail.com > mi_llave publica.asc # exporta la clave pública y la guarda en un archivo .asc
-ls mi_llave_publica.asc # verifica que el archivo se haya creado
-gpg --armor --export # exporta clave pública
-gpg --list-secret-keys --keyid-format=long # para listar las llaves privadas
-gpg --armor --export-secret-keys  # para especificar el hash de las llaves
+gpg --armor --export chamorrosamy525@gmail.com > mi_llave publica.asc # It exports the public key and saves it to an .asc file.
+ls mi_llave_publica.asc # verifies that the file has been created
+gpg --armor --export # Export public key
+gpg --list-secret-keys --keyid-format=long # To list private keys
+gpg --armor --export-secret-keys  # To specify the hash of the keys
 # gpg --pinentry-mode loopback --armor --export-secret-keys C942833FAF2766C1  / EN MICASO NO ME VALIO  EL ANTERIOR COMANDO Y APLIQUE ESTE COMANDO PARA QUE FUNIONARA Y ME SALIERA MI LLAVE PRIVADA.
-# El comando permite exportar la clave privada en formato ASCII, utilizando el modo loopback para ingresar la contraseña directamente en la terminal, lo cual es útil en entornos sin interfaz gráfica.
-gpg --import JenniMICOMPA_llave_publica.asc  #  compartir llave
-gpg --list-keys # listar llaves de mi compa
-$ echo "este mensaje es secreto" > doc_no_cifrado.txt # guardar un mensaje para nuestro compañero, en este caso "este mensaje es secreto"
-ls # mostar nombres de archivos y carpetas.
-cat doc_no_cifrado.txt # mostrar el contenido de un archivo de texto directamente en la terminal.
-gpg --output doc_cifrado.txt --encrypt --recipient condorjeniffer0@gmail.com doc_no_cifrado.txt # usamos el hash o correo de la clave publica de nuestro compa para cifrar el documento
-gpg --decrypt JMICOMPA_doc_cifrado.txt # decifrado el documento enviado por nuestro compa
-gpg --output doc_no_cifrado_firmado.txt --clearsign doc_no_cifrado.txt
-ls # ver archivos
-cat doc_no_cifrado_firmado.txt # permite ver contenido del archivo (incluyendo la firma)
+# The command allows you to export the private key in ASCII format, using loopback mode to enter the password directly in the terminal, which is useful in environments without a graphical interface.
+# We create an .asc file with our friend's public key
+gpg --import JenniMICOMPA_llave_publica.asc  #  Share key 
+gpg --list-keys # List my friend's keys
+$ echo "este mensaje es secreto" > doc_no_cifrado.txt # Save a message for our friend, in this case "this message is secret"
+ls # Display file and folder names.
+cat doc_no_cifrado.txt # Displays the contents of a text file directly in the terminal.
+gpg --output doc_cifrado.txt --encrypt --recipient condorjeniffer0@gmail.com doc_no_cifrado.txt # We use our friend's public key hash or email to encrypt the document
+gpg --decrypt JMICOMPA_doc_cifrado.txt # Decrypt the document sent by our friend
+gpg --output doc_no_cifrado_firmado.txt --clearsign doc_no_cifrado.txt # Firmar archivo 
+ls # View files
+cat doc_no_cifrado_firmado.txt # Allows you to view the file contents (including the signature)
