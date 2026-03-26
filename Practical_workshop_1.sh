@@ -29,3 +29,6 @@ gpg --output doc_no_cifrado_firmado_binario.txt --sign doc_no_cifrado.txt # Sign
 gpg --verify JENMICOMPA_doc_no_cifrado_firmado_binario.txt # This is used to verify the authenticity and integrity of a file signed in binary format.
 gpg --output firma_separada_doc_no_cifrado.sig --detach-sign doc_no_cifrado.txt # Sign the document and we will separate the signature from the document.
 gpg --verify JENMICOMPA_firma_separada_doc_no_cifrado.sig JMICOMPA_doc_no_cifrado.txt # Verifies a separate digital signature of our friend.
+gpg --output doc_cifrado_y_firmado.txt --encrypt --sign --recipient C970546ABAFA2BE1 doc_no_cifrado.txt # It protects the file by combining confidentiality (encryption) and authenticity (digital signature).
+# gpg --pinentry-mode loopback --output doc_cifrado_y_firmado.txt \ --encrypt --sign --recipient C970546ABAFA2BE1 doc_no_cifrado.txt   
+# USE THIS COMMAND BECAUSE I GOT THE SMALL SCREEN ERROR  / This encrypts and signs a file simultaneously to ensure privacy, authenticity, and integrity.
