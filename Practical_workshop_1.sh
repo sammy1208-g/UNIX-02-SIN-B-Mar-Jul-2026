@@ -22,3 +22,6 @@ gpg --output doc_no_cifrado_firmado.txt --clearsign doc_no_cifrado.txt # Firmar 
 ls # View files
 cat doc_no_cifrado_firmado.txt # Allows you to view the file contents (including the signature)
 gpg --verify JEMICOMPA_doc_no_cifrado_firmado.txt # It is used to verify the authenticity and integrity of the signed file
+gpg --edit-key condorjeniffer0@gmail.com  # Give your friend a vote of confidence; it is also used to manage and modify a GPG key from the terminal.
+gpg --sign-key C970546ABAFA2BE1 #  Sign the key to ratify our decision.
+gpg --verify JEMICOMPA_doc_no_cifrado_firmado.txt # It is used to verify the authenticity and integrity of the signed file
