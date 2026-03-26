@@ -32,3 +32,5 @@ gpg --verify JENMICOMPA_firma_separada_doc_no_cifrado.sig JMICOMPA_doc_no_cifrad
 gpg --output doc_cifrado_y_firmado.txt --encrypt --sign --recipient C970546ABAFA2BE1 doc_no_cifrado.txt # It protects the file by combining confidentiality (encryption) and authenticity (digital signature).
 # gpg --pinentry-mode loopback --output doc_cifrado_y_firmado.txt \ --encrypt --sign --recipient C970546ABAFA2BE1 doc_no_cifrado.txt   
 # USE THIS COMMAND BECAUSE I GOT THE SMALL SCREEN ERROR  / This encrypts and signs a file simultaneously to ensure privacy, authenticity, and integrity.
+gpg --output doc_cifrado_y_firmado_descifrado_y_validado.txt --decrypt JenMICOMPA_doc_cifrado_y_firmado.txt
+cat doc_cifrado_y_firmado_descifrado_y_validado.txt # Allows you to view the file contents 
