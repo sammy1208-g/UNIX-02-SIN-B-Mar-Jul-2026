@@ -28,3 +28,4 @@ gpg --verify JEMICOMPA_doc_no_cifrado_firmado.txt # It is used to verify the aut
 gpg --output doc_no_cifrado_firmado_binario.txt --sign doc_no_cifrado.txt # Sign the file and generate a signed binary version to ensure authenticity and integrity.
 gpg --verify JENMICOMPA_doc_no_cifrado_firmado_binario.txt # This is used to verify the authenticity and integrity of a file signed in binary format.
 gpg --output firma_separada_doc_no_cifrado.sig --detach-sign doc_no_cifrado.txt # Sign the document and we will separate the signature from the document.
+gpg --verify JENMICOMPA_firma_separada_doc_no_cifrado.sig JMICOMPA_doc_no_cifrado.txt # Verifies a separate digital signature of our friend.
