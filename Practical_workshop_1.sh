@@ -25,3 +25,5 @@ gpg --verify JEMICOMPA_doc_no_cifrado_firmado.txt # It is used to verify the aut
 gpg --edit-key condorjeniffer0@gmail.com  # Give your friend a vote of confidence; it is also used to manage and modify a GPG key from the terminal.
 gpg --sign-key C970546ABAFA2BE1 #  Sign the key to ratify our decision.
 gpg --verify JEMICOMPA_doc_no_cifrado_firmado.txt # It is used to verify the authenticity and integrity of the signed file
+gpg --output doc_no_cifrado_firmado_binario.txt --sign doc_no_cifrado.txt # Sign the file and generate a signed binary version to ensure authenticity and integrity.
+gpg --verify JENMICOMPA_doc_no_cifrado_firmado_binario.txt # This is used to verify the authenticity and integrity of a file signed in binary format.
