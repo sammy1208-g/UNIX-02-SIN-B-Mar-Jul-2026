@@ -1,3 +1,4 @@
 sudo apt update # Updates the list of available packages
 sudo apt upgrade # Upgrades the programs you already have installed.
 sudo apt install parted # Installs parted, a tool used to manage disk partitions (create, resize, delete partitions).
+sudo parted -l && echo -e "\n---\n" && lsblk -f && echo -e "\n---\n"  # Shows disk/partition info in two formats, separated by lines for readability.
