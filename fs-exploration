@@ -3,3 +3,5 @@ sudo apt upgrade # Upgrades the programs you already have installed.
 sudo apt install parted # Installs parted, a tool used to manage disk partitions (create, resize, delete partitions).
 sudo parted -l && echo -e "\n---\n" && lsblk -f && echo -e "\n---\n"  # Shows disk/partition info in two formats, separated by lines for readability.
 [ -d /sys/firmware/efi ] && echo "UEFI" || echo "BIOS"  # Checks if the system is using UEFI or BIOS and prints the result.
+echo "esto es un archivo" > archivo.txt # Creates a file called archivo.txt
+stat archivo.txt # Shows detailed file information (size, permissions, dates, inode)
