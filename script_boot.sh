@@ -4,7 +4,7 @@ cd ~ # It is a shortcut for your home directory.
 cd $HOME # It is an environment variable that stores your home directory path
 mkdir proyecto # Creates a new directory (folder) called proyecto.
 cd proyecto/ # Moves into the proyecto directory
-ls -lai # Lists files  
+ls -lai # Lists files  / Shows hidden files (like . and ..) . Current directory / .. Parent Directory
 #Results : 
 #total 12
 # 925550 drwxr-xr-x 2 codespace codespace 4096 Apr  6 12:35 .
