@@ -30,4 +30,14 @@ stat /tmp/prueba # Shows detailed information about the prueba directory
 #Change: 2026-04-06 12:52:52.527521831 +0000
 #Birth: 2026-04-06 12:52:52.526521831 +0000
 #Device:  8,1 / Storage device ID
-man mkdir -p /tmp/prueba/sub1 /tmp/prueba/sub2 # This open the manual 
+man mkdir -p /tmp/prueba/sub1 /tmp/prueba/sub2 # This open the manual. 
+pwd # Where an I.
+whoami # Who am. 
+ls # Show files. 
+ls -l # Detailed list of files and directories.
+ls -la  # Combine : ls -l / ls -a   / Shows hidden files too.
+ls -lh # Combine : ls -l / ls -h    / Lists files in long format with human-readable sizes.
+ls -lt # Lists files in long format sorted by modification time.
+ls / # Shows all top-level folders in the system.
+ls /etc | head -20 # Lists configuration files and displays only the first 20.
+ls /dev | head -20 # Lists device files and shows the first 20.
