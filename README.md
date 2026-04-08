@@ -24,3 +24,16 @@ Clona el repositorio del kernel ( solo el ultimo comm)
 cd linux
 make menuconfig
 make -j 2
+
+Imagen del Proyecto: 
+
+ls arch/x86/boot/bzImage
+sudo mkdir /boot-files
+sudo cp arch/x86/boot/bzImage /boot-files/
+cd ..
+git clone --depth 1 https://git.busybox.net/busybox
+cd busybox
+make menuconfig
+make -j 2
+sudo mkdir /boot-files/initramfs
+sudo make CONFIG_PREFIX=/boot-files/initramfs install
