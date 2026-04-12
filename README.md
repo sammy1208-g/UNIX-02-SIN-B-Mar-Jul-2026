@@ -123,8 +123,7 @@ qemu-system-x86_64 -nographic -append "console=ttyS0" \
 # EXERCISES
 
 # 1
-[ -d /sys/firmware/efi ] && echo "UEFI" ||
-echo "BIOS"
+[ -d /sys/firmware/efi ] && echo "UEFI" || echo "BIOS"
 # Results 
 BIOS
 # The result is BIOS because GitHub Codespaces runs in a virtualized environment that does not expose UEFI firmware. Similarly, QEMU also uses a legacy BIOS by default unless explicitly configured to use UEFI. This confirms that both environments simulate a traditional boot process.
@@ -159,3 +158,80 @@ lrwxrwxrwx    1 0        0                7 Apr 12 01:28 cttyhack -> busybox
 # All the commands in the /bin directory are symbolic links to the BusyBox binary. This means that a single executable (busybox) provides multiple utilities such as ls, rm, sh, and vi. This design reduces storage usage and is ideal for minimal or embedded systems. This demonstrates how BusyBox simplifies system design by combining many tools into a single binary, making it efficient for lightweight environments. 
 
 # 4
+echo "hola" > test.txt
+stat test.txt 
+# Results 
+  File: test.txt
+  Size: 5               Blocks: 8          IO Block: 4096   regular file
+Device: 0,45    Inode: 714973      Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2026-04-12 19:18:11.789634350 +0000
+Modify: 2026-04-12 19:18:11.789634350 +0000
+Change: 2026-04-12 19:18:11.789634350 +0000
+ Birth: 2026-04-12 19:18:11.789634350 +0000
+# The file test.txt created with the content “hola” has a real size of 5 bytes, but when checking with stat, it shows that it occupies 8 blocks with an I/O block size of 4096 bytes. This means the filesystem allocates full blocks even for very small files. As a result, most of the allocated space inside those blocks is not used. Therefore, there is internal fragmentation because the disk space used is much larger than the actual file size.
+
+# 5
+sudo parted -l && echo -e "\n---\n" && lsblk -f
+# Results
+Model: Msft Virtual Disk (scsi)
+Disk /dev/sda: 32.2GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start   End     Size    File system  Name  Flags
+14      1049kB  5243kB  4194kB                     bios_grub
+15      5243kB  116MB   111MB   fat32              boot, esp
+ 1      116MB   32.2GB  32.1GB  ext4
+
+
+Model: Msft Virtual Disk (scsi)
+Disk /dev/sdb: 48.3GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: msdos
+Disk Flags: 
+
+Number  Start   End     Size    Type     File system  Flags
+ 1      1049kB  48.3GB  48.3GB  primary  ext4
+
+
+Model: Msft Virtual Disk (scsi)
+Disk /dev/sdc: 550GB
+Sector size (logical/physical): 512B/4096B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start   End    Size   File system  Name      Flags
+ 1      1049kB  550GB  550GB  ext4         ext4part
+
+
+
+---
+
+NAME    FSTYPE FSVER LABEL UUID FSAVAIL FSUSE% MOUNTPOINTS
+loop0                                          
+loop1                                          
+loop2                                          
+loop3                                          
+loop4                             13.6G    52% /workspaces/.codespaces/.persistedshare
+                                               /var/lib/docker
+                                               /home/vscode/.minikube
+                                               /etc/hosts
+                                               /etc/hostname
+                                               /etc/resolv.conf
+                                               /workspaces
+loop5                                          
+sda                                            
+├─sda1                            11.4G    61% /workspaces/.codespaces/shared
+│                                              /.codespaces/bin
+│                                              /vscode
+│                                              /usr/sbin/docker-init
+├─sda14                                        
+└─sda15                                        
+sdb                                            
+└─sdb1                            39.5G     5% /tmp
+sdc                                            
+└─sdc1                                         
+sr0                      
+# The system contains three disks: /dev/sda, /dev/sdb, and /dev/sdc. The disks /dev/sda and /dev/sdc use GPT (GUID Partition Table), while /dev/sdb uses MBR (msdos). Regarding filesystems, FAT32 is used for the EFI system partition on /dev/sda, and ext4 is used for Linux partitions on /dev/sda, /dev/sdb, and /dev/sdc. Therefore, the system combines both partition schemes (GPT and MBR) and mainly uses FAT32 and ext4 filesystems, demonstrating how storage is organized at a low level.
