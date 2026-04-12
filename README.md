@@ -115,3 +115,47 @@ cp bzImage init.cpio m
 
 # Unmounts the filesystem from the directory m.
 umount m
+
+# Runs a virtual machine with QEMU without graphics (-nographic), boots using the bzImage kernel and init.cpio initramfs, passes the console to ttyS0, and uses boot as a raw disk image.
+qemu-system-x86_64 -nographic -append "console=ttyS0" \
+-kernel bzImage -initrd init.cpio -drive file=boot,format=raw
+
+# EXERCISES
+
+# 1
+[ -d /sys/firmware/efi ] && echo "UEFI" ||
+echo "BIOS"
+# Results 
+BIOS
+# The result is BIOS because GitHub Codespaces runs in a virtualized environment that does not expose UEFI firmware. Similarly, QEMU also uses a legacy BIOS by default unless explicitly configured to use UEFI. This confirms that both environments simulate a traditional boot process.
+
+# 2
+ls /
+# Results
+bin   dev   init  root  sbin  usr
+# The filesystem structure is minimal and only includes essential directories such as /bin, /sbin, /usr, /dev, and /root, along with the init file. Many standard directories like /home, /var, /tmp, and /etc are missing because this system is based only on BusyBox and a custom initramfs, not a full Linux distribution. This demonstrates how a minimal Linux system can operate with only the essential components required for booting and basic interaction.
+
+# 3
+ls -la /bin/
+# Results
+Total 2440 
+drwxr-xr-x    2 0        0             1920 Apr 12 01:28 .
+drwxr-xr-x    7 0        0              180 Apr 12 04:15 ..
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 arch -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 ash -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 base32 -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 base64 -> busybox
+-rwxr-xr-x    1 0        0          2497624 Apr 12 01:28 busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 cat -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 chattr -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 chgrp -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 chmod -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 chown -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 conspy -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 cp -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 cpio -> busybox
+lrwxrwxrwx    1 0        0                7 Apr 12 01:28 cttyhack -> busybox
+....
+# All the commands in the /bin directory are symbolic links to the BusyBox binary. This means that a single executable (busybox) provides multiple utilities such as ls, rm, sh, and vi. This design reduces storage usage and is ideal for minimal or embedded systems. This demonstrates how BusyBox simplifies system design by combining many tools into a single binary, making it efficient for lightweight environments. 
+
+# 4
