@@ -26,5 +26,7 @@ rmdir -- -rf
 # -- : Stops option parsing
 # -rf : The directory name to remove
 
+ls --help # Short option / Shows a help message with all available options of ls.
+mal ls # Long option / Opens the full manual page for ls with detailed explanations.
 
 
