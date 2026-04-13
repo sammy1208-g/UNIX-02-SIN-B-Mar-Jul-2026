@@ -14,4 +14,17 @@ ls -l -a -h # Long option
 ls -l -ah # long option
 ls -lah # Short option
 
+#Creates a directory named -rf.
+mkdir -- -rf
+#mkdir: Creates a directory
+# -- : Stops option parsing (everything after this is treated as a name, not an option)
+# -rf : The name of the directory to create (“-rf”)
+
+#Removes the directory named -rf (only if it is empty).
+rmdir -- -rf
+# rmdir : Removes an empty directory
+# -- : Stops option parsing
+# -rf : The directory name to remove
+
+
 
