@@ -40,3 +40,21 @@ man git-clone # Opens the manual page for git clone, explaining how to copy (clo
 #--depth <depth>
 #          Create a shallow clone with a history truncated to the specified number of commits. Implies --single-branch unless --no-single-branch is given to fetch the histories
 #          near the tips of all branches. If you want to clone submodules shallowly, also pass --shallow-submodules.
+
+chmod +x script.sh # Execute permission is added to user, group, and others
+ls -l # 
+#Results: -rwxrwxrwx 1 codespace codespace  1936 Apr 13 13:11 script.sh
+chmod u+x script.sh # Adds execute permission only to the user (owner)
+ls -l 
+#Results: Only user gets execute permission 
+# -rwxrwxrwx 1 codespace codespace  1936 Apr 13 13:11 script.sh
+chmod o-r script.sh # Removes read permission from others
+ls -l
+#Results: Others can’t read the file
+# -rwxrwx-wx 1 codespace codespace  2190 Apr 13 13:15 script.sh
+chmod u+rw,go-rwx script.sh
+# u+rw: user gets read & write
+# go-rwx: group & others lose all permissions
+ls -l
+#Results: Only user can read/write, no one else has access
+# -rwx------ 1 codespace codespace  2262 Apr 13 13:16 script.sh
