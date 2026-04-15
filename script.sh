@@ -74,3 +74,8 @@ cat /etc/archivo_protegido
 echo "hola" | sudo tee /etc/archivo_protegido
 #It writes to a protected file with admin privileges and also prints the text.
 
+sudo sh -c 'echo "chao" >> /etc/archivo_protegido'
+# Runs everything as root and uses >> to append (not overwrite) "chao" to the file.
+
+cat /etc/archivo_protegido
+# Display the content: hola, chao
