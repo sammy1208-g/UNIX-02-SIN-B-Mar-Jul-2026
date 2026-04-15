@@ -21,5 +21,15 @@ ls -l hola.sh # Now you will see x in permissions, meaning the file is executabl
 #Results: hola desde mi primer script
 
 
+ls /etc
+# No sudo needed. It just lists system files. /etc is usually readable by all users.
+touch /etc/prueba.txt
+# Needs sudo. /etc is a protected system directory, so normal users cannot create files there.
+mkdir ~/mi_carpeta
+#No sudo needed. ~ is your home directory, where you have full permissions.
+apt install cowsay
+# Needs sudo. Installing software modifies the system, so it requires admin privileges.
+
+
 
 
