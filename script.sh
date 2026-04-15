@@ -65,4 +65,12 @@ sudo echo "hola" > /etc/archivo_protegido
 # bash: /etc/archivo_protegido: Permission denied
 #The error happens because the > redirection is handled by your shell, not by sudo. Your shell runs without elevated privileges, so it cannot write to /etc.
 
+echo "hola" | sudo tee /etc/archivo_protegido > /dev/null
+#The command writes "hola" into a protected file using admin privileges, without printing anything to the terminal.
+
+#Read and display the file archivo_protegido content in the terminal.
+cat /etc/archivo_protegido
+
+echo "hola" | sudo tee /etc/archivo_protegido
+#It writes to a protected file with admin privileges and also prints the text.
 
