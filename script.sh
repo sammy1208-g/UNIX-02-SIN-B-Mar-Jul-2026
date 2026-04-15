@@ -84,3 +84,11 @@ sudo su -
 #This command switches you to a full root user session.
 exit
 #This command to leave the current session. 
+
+echo "$HOME"
+#Results: /home/codespace
+#expands the variable
+
+echo '$HOME'
+#Results: $HOME
+#Anything inside the single quote is treated as a string. 
