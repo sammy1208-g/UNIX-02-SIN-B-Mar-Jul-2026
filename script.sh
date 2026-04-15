@@ -79,3 +79,8 @@ sudo sh -c 'echo "chao" >> /etc/archivo_protegido'
 
 cat /etc/archivo_protegido
 # Display the content: hola, chao
+
+sudo su -
+#This command switches you to a full root user session.
+exit
+#This command to leave the current session. 
