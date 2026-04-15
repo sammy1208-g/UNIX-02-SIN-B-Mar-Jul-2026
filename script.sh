@@ -58,3 +58,11 @@ chmod u+rw,go-rwx script.sh
 ls -l
 #Results: Only user can read/write, no one else has access
 # -rwx------ 1 codespace codespace  2262 Apr 13 13:16 script.sh
+
+
+sudo echo "hola" > /etc/archivo_protegido
+#Results
+# bash: /etc/archivo_protegido: Permission denied
+#The error happens because the > redirection is handled by your shell, not by sudo. Your shell runs without elevated privileges, so it cannot write to /etc.
+
+
