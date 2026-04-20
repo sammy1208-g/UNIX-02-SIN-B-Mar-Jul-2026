@@ -57,26 +57,26 @@ git commit -m "Fix problema 1: estructura de directorios corregida"
 
 ---
 
-### Problema 2 — Archivos mal ubicados y renombrados · **(1 pt máx · 2 fallos)**
+  ### Problema 2 — Archivos mal ubicados y renombrados · **(1 pt máx · 2 fallos)**
 
-Dentro de `nebula/` hay **exactamente 2 errores** de nombre o ubicación de archivos:
+  Dentro de `nebula/` hay **exactamente 2 errores** de nombre o ubicación de archivos:
 
-- Un archivo de texto con datos de telemetría está en la **ubicación incorrecta**;
-  debería estar dentro de `bitacoras/`. Muévelo (no lo copies).
-- Un archivo de configuración tiene **extensión incorrecta** (`.bak`);
-  su nombre correcto es `estrella.conf`.
+  - Un archivo de texto con datos de telemetría está en la **ubicación incorrecta**;
+    debería estar dentro de `bitacoras/`. Muévelo (no lo copies).
+  - Un archivo de configuración tiene **extensión incorrecta** (`.bak`);
+    su nombre correcto es `estrella.conf`.
 
-```bash
-git add .
-git commit -m "Fix problema 2: archivos movidos y renombrados"
-```
+  ```bash
+  git add .
+  git commit -m "Fix problema 2: archivos movidos y renombrados"
+  ```
 
-| Sub-check | Correcto | Intento fallido | Sin respuesta |
-|-----------|----------|-----------------|---------------|
-| 2a. `cosmos.txt` en `bitacoras/` (movido, no copiado) | +0.50 | -0.25 | 0 |
-| 2b. `estrella.conf` existe, `estrella.bak` no | +0.50 | -0.25 | 0 |
+  | Sub-check | Correcto | Intento fallido | Sin respuesta |
+  |-----------|----------|-----------------|---------------|
+  | 2a. `cosmos.txt` en `bitacoras/` (movido, no copiado) | +0.50 | -0.25 | 0 |
+  | 2b. `estrella.conf` existe, `estrella.bak` no | +0.50 | -0.25 | 0 |
 
----
+  ---
 
 ### Problema 3 — Permisos numéricos con `chmod` · **(1 pt máx · 1 fallo)**
 
