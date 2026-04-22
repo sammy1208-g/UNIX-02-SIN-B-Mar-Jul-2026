@@ -6,3 +6,4 @@ echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')"
 echo "Host: $(hostname)"
 echo "Usuario efectivo: $(whoami)"
 echo "Sistema listo."
+
