@@ -4,3 +4,4 @@ Sensor        : COSMOS-7
 Temperatura   : 4.2 K
 Estado        : Nominal
 Clasificación : CONFIDENCIAL
+
