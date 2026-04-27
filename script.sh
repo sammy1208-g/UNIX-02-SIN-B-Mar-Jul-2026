@@ -92,3 +92,6 @@ echo "$HOME"
 echo '$HOME'
 #Results: $HOME
 #Anything inside the single quote is treated as a string. 
+
+umask # umask is a value that removes permissions from new files and directories by default.
+#Results : 0022
