@@ -173,3 +173,17 @@ sudo chown luna:grupo_test mi_archivo # changes both owner and group of the file
 ls -l mi_archivo # Shows file details (permissions, owner, group, etc.) 
 #Results:
 # -rw-r--r-- 1 luna grupo_test 5 Apr 27 13:49 mi_archivo
+
+mkdir -p proyecto/sub
+touch proyecto/readme proyecto/sub/datos
+sudo chown -R luna:grupo_test proyecto
+ls -lR proyecto
+#Results:
+#proyecto:
+total 4
+-rw-r--r-- 1 luna grupo_test    0 Apr 27 13:58 readme
+drwxr-xr-x 2 luna grupo_test 4096 Apr 27 13:58 sub
+
+proyecto/sub:
+total 0
+-rw-r--r-- 1 luna grupo_test 0 Apr 27 13:58 datos 
