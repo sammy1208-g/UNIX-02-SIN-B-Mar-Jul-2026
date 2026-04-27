@@ -164,3 +164,12 @@ umask # Confirms the mask → 0022
 sudo useradd -m -s /usr/bin/zsh luna # Creates a new user named luna and sets the shell to Zsh
 sudo chown luna mi_archivo # Changes the owner of mi_archivo to luna
 ls -l mi_archivo # Shows detailed information about the file mi_archivo.
+
+groups 
+groupadd grupo_test
+
+
+sudo chown luna:grupo_test mi_archivo
+ls -l mi_archivo
+#Results:
+# -rw-r--r-- 1 luna grupo_test 5 Apr 27 13:49 mi_archivo
