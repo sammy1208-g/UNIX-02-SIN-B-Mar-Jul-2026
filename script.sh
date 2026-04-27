@@ -127,3 +127,40 @@ ls -l # shows detailed listing
 #-rwxrwxrwx  1 codespace root         44 Apr 27 12:07 hola.sh
 #-rwxrwxrwx  1 codespace root          0 Apr 27 12:07 prueba.txt
 #-rwxrwxrwx  1 codespace root       4572 Apr 27 12:36 script.sh
+
+sudo apt-get update # updates package list
+sudo apt-get upgrade # upgrades installed packages
+sudo apt-get install acl # installs ACL support (advanced permissions)
+sudo chown -R $(whoami) . # changes ownership to current user 
+sudo setfacl -bnR . # removes all ACLs recursively
+ 
+
+umask 077 # very restrictive (no access for others)
+touch secrecto.txt # creates file: secreto.txt
+mkdir privado # creates directory
+ls -l # shows permissions
+#Results
+#-rw-rw-rw- 1 codespace root         70 Apr 27 12:07 README.md
+#-rw-rw-rw- 1 codespace codespace     0 Apr 27 12:33 archivo1
+#-rw-rw-rw- 1 codespace codespace     0 Apr 27 12:37 archivo2
+#drwxrwxrwx 2 codespace codespace  4096 Apr 27 12:34 directorio1
+#drwxrwxrwx 2 codespace codespace  4096 Apr 27 12:37 directorio2
+#-rw-rw-rw- 1 codespace root       1262 Apr 27 12:07 ejercicio1.sh
+#-rw-rw-rw- 1 codespace root        522 Apr 27 12:07 ejercicio2.sh
+#-rwxrwxrwx 1 codespace root         44 Apr 27 12:07 hola.sh
+#drwx------ 2 codespace codespace  4096 Apr 27 13:06 privado
+#-rwxrwxrwx 1 codespace root          0 Apr 27 12:07 prueba.txt
+#-rwxrwxrwx 1 codespace root       5644 Apr 27 13:11 script.sh
+#-rw------- 1 codespace codespace     0 Apr 27 13:05 secreto.txt
+
+umask 0022 # sets the permission mask
+whoami  # shows your current user
+echo "Hola" > mi_archivo # creates the file and writes “Hola”
+ls -l mi_archivo # shows permissions
+umask # Confirms the mask → 0022
+#Result: 
+# 0022
+
+sudo useradd -m -s /usr/bin/zsh luna # Creates a new user named luna and sets the shell to Zsh
+sudo chown luna mi_archivo # Changes the owner of mi_archivo to luna
+ls -l mi_archivo # Shows detailed information about the file mi_archivo.
