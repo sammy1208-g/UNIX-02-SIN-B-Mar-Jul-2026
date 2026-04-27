@@ -95,3 +95,35 @@ echo '$HOME'
 
 umask # umask is a value that removes permissions from new files and directories by default.
 #Results : 0022
+
+touch archivo1 # Creates an empty file called archivo1.
+mkdir directorio1 # Creates a directory (folder) called directorio1.
+ls -l # Lists files in long format (detailed view).
+#total 60
+#-rw-rw-rw-  1 codespace root      34523 Apr 27 12:07 LICENSE
+#-rw-rw-rw-  1 codespace root         70 Apr 27 12:07 README.md
+#-rw-rw-rw-  1 codespace codespace     0 Apr 27 12:33 archivo1
+#drwxrwxrwx+ 2 codespace codespace  4096 Apr 27 12:34 directorio1
+#-rw-rw-rw-  1 codespace root       1262 Apr 27 12:07 ejercicio1.sh
+#-rw-rw-rw-  1 codespace root        522 Apr 27 12:07 ejercicio2.sh
+#-rwxrwxrwx  1 codespace root         44 Apr 27 12:07 hola.sh
+#-rwxrwxrwx  1 codespace root          0 Apr 27 12:07 prueba.txt
+#-rwxrwxrwx  1 codespace root       3819 Apr 27 12:33 script.sh
+
+umask 027 # sets a more restrictive permission mask
+touch archivo2 # creates an empty file: archivo2
+mkdir directorio2 # creates a directory
+ls -l # shows detailed listing
+#Results
+# total 68
+#-rw-rw-rw-  1 codespace root      34523 Apr 27 12:07 LICENSE
+#-rw-rw-rw-  1 codespace root         70 Apr 27 12:07 README.md
+#-rw-rw-rw-  1 codespace codespace     0 Apr 27 12:33 archivo1
+#-rw-rw-rw-  1 codespace codespace     0 Apr 27 12:37 archivo2
+#drwxrwxrwx+ 2 codespace codespace  4096 Apr 27 12:34 directorio1
+#drwxrwxrwx+ 2 codespace codespace  4096 Apr 27 12:37 directorio2
+#-rw-rw-rw-  1 codespace root       1262 Apr 27 12:07 ejercicio1.sh
+#-rw-rw-rw-  1 codespace root        522 Apr 27 12:07 ejercicio2.sh
+#-rwxrwxrwx  1 codespace root         44 Apr 27 12:07 hola.sh
+#-rwxrwxrwx  1 codespace root          0 Apr 27 12:07 prueba.txt
+#-rwxrwxrwx  1 codespace root       4572 Apr 27 12:36 script.sh
