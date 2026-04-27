@@ -169,7 +169,7 @@ groups
 groupadd grupo_test
 
 
-sudo chown luna:grupo_test mi_archivo
-ls -l mi_archivo
+sudo chown luna:grupo_test mi_archivo # changes both owner and group of the file
+ls -l mi_archivo # Shows file details (permissions, owner, group, etc.) 
 #Results:
 # -rw-r--r-- 1 luna grupo_test 5 Apr 27 13:49 mi_archivo
