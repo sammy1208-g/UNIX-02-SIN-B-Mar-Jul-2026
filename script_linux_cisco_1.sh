@@ -112,3 +112,8 @@ tail alpha.txt # Shows the last 10 lines of the file.
 head -n 5 alpha.txt # Shows the first 5 lines of the file alpha.txt. The -n 5 option specifies the number of lines to display.
 tail -n 5 alpha.txt # Shows the last 5 lines of the file alpha.txt.
 
+cp /etc/passwd . # Copies the file /etc/passwd (a system file that stores user account information) into the current directory (. means “here”).
+ls # Then lists the files in the current directory, so you can see that the file passwd has been copied successfully.
+
+
+
