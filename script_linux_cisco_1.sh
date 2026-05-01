@@ -115,5 +115,9 @@ tail -n 5 alpha.txt # Shows the last 5 lines of the file alpha.txt.
 cp /etc/passwd . # Copies the file /etc/passwd (a system file that stores user account information) into the current directory (. means “here”).
 ls # Then lists the files in the current directory, so you can see that the file passwd has been copied successfully.
 
+cd ~ # Moves you to your home directory, no matter where you currently are.
+dd if=/dev/zero of=/tmp/swapex bs=1M count=50 # Creates a file called swapex in /tmp filled with zeros. It uses dd to write 50 blocks of 1 MB each (bs=1M count=50), 
+# resulting in a 50 MB file. /dev/zero is a special system source that provides continuous zero bytes.
+
 
 
