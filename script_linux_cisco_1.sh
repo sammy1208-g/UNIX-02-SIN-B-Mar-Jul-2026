@@ -70,18 +70,14 @@ ls -r /var/log
 # lists the contents of the /var/log directory in reverse order (usually Z → A). 
 # It only shows the file and folder names without extra details.
 
-sudo - # 
-# 
-exit # 
+su - # Switches to the root user with a full login environment.
+exit # Closes the current shell or session (for example, exits sudo)
 
-sl #
+sl # A fun program (Easter egg) that shows a train animation. It runs only if installed.
 
-su - #
+su - # Switches to the root user with a full login environment.
 
-sl # 
-exit # 
-
-sudo sl # 
+sudo sl # Runs the sl command with administrator privileges. If sl is installed, it shows the train as root.
 
 cd ~/Documents # Changes the current directory to the Documents folder inside your home directory.
 ls -l hello.sh # shows detailed information about the file hello.sh. 
