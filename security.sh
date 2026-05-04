@@ -50,3 +50,10 @@ cat /etc/gshadow # Display protected information about system groups.
 #ews:*::
 # ....
 
+mkdir ~/proyecto_unix/ # This command creates a folder called project_unix inside your home directory.
+
+ls -la ~/proyecto_unix/ #This command allows you to view detailed information about everything inside the project_unix folder (permissions, owner, size, date), including hidden files.
+#Results: 
+# total 8
+# drwxr-xr-x 2 root root 4096 may  4 13:38 .
+# drwx------ 1 root root 4096 may  4 13:38 ..
