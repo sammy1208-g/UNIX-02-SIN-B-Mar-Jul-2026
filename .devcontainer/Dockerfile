@@ -219,14 +219,21 @@ RUN git config --system --add safe.directory '*' \
 # definida para que la imagen sea usable también con Docker puro.
 # Prompt del curso para bash
 
-RUN chsh -s /usr/bin/zsh root
+RUN cat >> /root/.bashrc <<'EOF'
 
-RUN cat >> /root/.zshrc <<'EOF'
-
-PROMPT='%F{cyan}[Samantha-Chamorro]%f %F{yellow}%1~%f %(?.%F{green}✓.%F{red}✗ %?)%f %# '
+# ===== Prompt del curso =====
+__set_prompt() {
+    local ec=$?
+    local mark
+    if [ $ec -eq 0 ]; then
+        mark='\[\e[32m\]✓\[\e[0m\]'
+    else
+        mark="\[\e[31m\]✗ $ec\[\e[0m\]"
+    fi
+    PS1="\[\e[36m\][Samantha-Chamorro]\[\e[0m\] \[\e[33m\]\W\[\e[0m\] $mark \$ "
+}
+PROMPT_COMMAND=__set_prompt
 EOF
-
-CMD ["/usr/bin/zsh"]
-
+CMD ["/bin/bash"]
 
 
