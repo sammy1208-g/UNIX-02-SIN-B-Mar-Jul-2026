@@ -57,3 +57,13 @@ ls -la ~/proyecto_unix/ #This command allows you to view detailed information ab
 # total 8
 # drwxr-xr-x 2 root root 4096 may  4 13:38 .
 # drwx------ 1 root root 4096 may  4 13:38 ..
+
+# groupadd [options] name_group
+#Create a simple group
+# When an identificator is less than 1000, it's an system identificator
+sudo groupadd desarrolladores
+sudo groupadd -g 2000 operaciones # specific GID
+# group system (GID < 1000)
+sudo groupadd --system servicios_web
+
+
