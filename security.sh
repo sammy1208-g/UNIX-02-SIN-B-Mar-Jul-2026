@@ -96,4 +96,12 @@ id
 sudo usermod -aG desarrolladores $USER
 sudo usermod -aG diseno $USER
 
+#Solution: 
+# Ser root
+ usermod -aG desarrolladores root
+ usermod -aG diseno root
+ #Verify 
+ groups
+ id
+ id root
 
