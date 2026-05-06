@@ -105,3 +105,11 @@ sudo usermod -aG diseno $USER
  id
  id root
 
+# Verify the change in /etc/group
+grep "desarrolladores\|diseno"
+
+#Add a user to a group with "adduser".
+sudo adduser root marketing
+#View the current status
+id root
+grep root /etc/group
