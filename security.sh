@@ -152,4 +152,9 @@ sudo chgrp diseno \
 ls -la ~/lab_chgrp/proyectos/
 ls -la ~/lab_chgrp/reportes/
 
+# Recursively change an entire directory
+sudo chgrp -R desarrolladores ~/lab_chgrp/scripts/ 
+ls -laR ~/lab_chgrp/scripts/
 
+# Verbose to see what changes
+ sudo chgrp -Rv diseno ~/lab_chgrp/reportes/
