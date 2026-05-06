@@ -89,4 +89,11 @@ sudo addgroup --system cache_web
 #Verify
 grep "diseno\|marketing\|cache_web" /etc/group
 
+#View which groups the currents user belongs to
+groups
+id
+#Add a user to group with "usermod" (low level)
+sudo usermod -aG desarrolladores $USER
+sudo usermod -aG diseno $USER
+
 
