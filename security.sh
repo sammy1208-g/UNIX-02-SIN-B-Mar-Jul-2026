@@ -113,3 +113,16 @@ sudo adduser root marketing
 #View the current status
 id root
 grep root /etc/group
+
+# Create new temporal group for demo
+sudo groupadd grupo_temporal
+usermod -aG grupo_temporal root
+id root # Have a grupo_temporal
+
+#Now the error: usermod without -a
+sudo usermod -G desarrolladores root
+#This delete all groups 
+
+id root #Lost all other groups
+
+
