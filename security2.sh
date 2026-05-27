@@ -64,3 +64,15 @@ ls -la ~/
 #drwxr-xr-x 5 root root             4096 may 27 12:46 .vscode-remote
 #-rw------- 1 root root              519 may 27 13:13 .zsh_history
 #-rw-r--r-- 1 root root            10976 may 27 12:46 .zshrc
+
+#proyecto_dev/ has group "developers"
+#Exit the newgrp subshell
+exit
+#Verify that we returned to the original group
+id -gn 
+#Results:
+#root
+echo "Grupo restaurado: $(id -gn)"
+# Results
+# Grupo restaurado: root
+                                                         
