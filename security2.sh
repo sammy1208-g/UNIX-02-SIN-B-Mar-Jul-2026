@@ -75,4 +75,10 @@ id -gn
 echo "Grupo restaurado: $(id -gn)"
 # Results
 # Grupo restaurado: root
+
+#Compare the two files
+ls -la ~/antes_de_newgrp.txt ~/dentro_de_newgrp.txt
+#Results
+#-rw-r--r-- 1 root root            0 may 27 13:06 /root/antes_de_newgrp.txt
+#-rw-r--r-- 1 root desarrolladores 0 may 27 13:29 /root/dentro_de_newgrp.txt
                                                          
