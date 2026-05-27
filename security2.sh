@@ -81,4 +81,26 @@ ls -la ~/antes_de_newgrp.txt ~/dentro_de_newgrp.txt
 #Results
 #-rw-r--r-- 1 root root            0 may 27 13:06 /root/antes_de_newgrp.txt
 #-rw-r--r-- 1 root desarrolladores 0 may 27 13:29 /root/dentro_de_newgrp.txt
-                                                         
+
+# newgrp create a subshell - this is demonstrable
+echo "PID del shell actual: $$" 
+#Results:
+# PID del shell actual: 14343
+newgrp desarrolladores
+echo "PID dentro de newgrp: $$"
+#Results:
+# PID dentro de newgrp: 28812
+# The PID is diferent - it is a child process
+
+exit 
+id-gn 
+#Results: root
+
+#Create a group with password
+groupadd grupo_restringido
+gpasswd grupo_restringido 
+
+# It asks to create a password
+# My Password:0979535295
+
+
