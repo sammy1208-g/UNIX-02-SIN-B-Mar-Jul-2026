@@ -17,3 +17,17 @@ touch ~/antes_de_newgrp.txt
 ls -la ~/antes_de_newgrp.txt
 #Results
 # -rw-r--r-- 1 root root 0 may 27 13:06 /root/antes_de_newgrp.txt
+
+#Change to the group "developers"
+newgrp desarrolladores
+#Error: 
+#Solution 
+# apt install util-linux-extra
+# groupadd desarrolladores
+# usermod -aG desarrolladores root
+# groups : root desarrolladores
+# newgrp desarrolladores
+
+#Verify that the active group has changed
+id -gn
+echo "Nuevo grupo activo: $(id -gn)"
