@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 #!/bin/bash -x  # Muestra los comandos en tiempo real- Display commands in real time.
 set -x # Enables trace mode. 
 
