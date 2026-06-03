@@ -1,4 +1,4 @@
-#!/bin/bash
+
 set -x
 
 # All this script does is create a directory, create a file
