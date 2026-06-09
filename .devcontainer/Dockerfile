@@ -109,6 +109,27 @@ RUN echo "wireshark-common wireshark-common/install-setuid boolean false" \
 # El "&&" encadena comandos: ejecuta el siguiente SOLO SI el anterior
 # terminó bien. Si algo falla, el build se detiene con error (que es lo
 # que queremos: mejor un error claro que una imagen rota).
+
+
+
+# (Samantha): This is the biggest instruction in the whole Dockerfile.
+# apt-get update  --> Refreshes the package list, like syncing a catalog.
+# apt-get install -y --> Install and download package and says "yes to everything, don't ask me".
+# --no-install-recommends --> Skips optional extras, smaller final image.
+# && chains commands: If update fails, install never runs (fail-fast).
+# The \ at line endings is just a line break for readability.
+# One single RUN = one single layer, smaller image (BHB Ch. 3).
+
+# Key tools:
+#   gawk   --> Processes text column by column, great for log parsing (BHB Ch. 2).
+#   sed   --> Find-and-replace in files without opening an editor (BHB Ch. 2).
+#   grep  --> Filters lines matching a pattern, backbone of pipelines (BHB Ch. 2).
+#   shellcheck --> Catches bugs in bash scripts before running them (BHB Ch. 1).
+#   nmap  --> Scans networks to find hosts and open ports (BHB Ch. 3).
+#   tcpdump/tshark --> Capture real network traffic to analyze it (BHB Ch. 3).
+#   tor/proxychains4 --> Route traffic anonymously through proxies (BHB Ch. 3).
+#   jq    --> Parses JSON from the terminal, like grep for structured data.
+#   man-db --> Enables "man grep", "man bash". Kali removes docs by default.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     \
     # === Editores de texto y shells (intérpretes de comandos) ===
