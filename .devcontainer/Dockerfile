@@ -304,8 +304,30 @@ RUN git config --system --add safe.directory '*' \
 # definida para que la imagen sea usable también con Docker puro.
 # Prompt del curso para bash
 
+
+# (Samantha): This command changes the default login shell for the root user
+# to bash. chsh means "change shell" — it updates /etc/passwd so that
+# every time root logs in, bash starts automatically.
+# The book display this: "if you want to change your default shell
+# to bash, you can use the chsh -s /bin/bash command."
+# In dev2 I switched from zsh to bash because bash is the shell the
+# entire BHB book.
 RUN chsh -s /usr/bin/bash root
 
+
+
+# (Samantha): A heredoc (<<'EOF' ... EOF) writes multiple lines directly into
+# a command without needing a separate file.
+# Single quotes in <<'EOF' mean: don't expand $variables at build time,
+# write them literally so bash evaluates them when the shell starts.
+# (BHB Ch. 1 — quoting rules and I/O redirection: >> appends to a file).
+
+# What the prompt function does:
+#   $? --> Holds the exit code of the last command (BHB Ch. 1).
+#   exit 0 = Success --> Green ✓ appears in the prompt.
+#   exit ≠0 = Error  --> Red ✗ plus the error number appears.
+#   PS1 --> The env var that defines what the prompt looks like.
+#   PROMPT_COMMAND --> Bash runs this before drawing each prompt.
 RUN cat >> /root/.bashrc <<'EOF'
 __set_prompt(){
     local ec=$?
@@ -320,9 +342,11 @@ __set_prompt(){
 PROMPT_COMMAND=__set_prompt
 EOF
 
-
+# (Samantha): CMD is different from RUN:
+#   RUN --> Executes at BUILD time while creating the image layers
+#   CMD --> Executes at START time when someone launches the container
+# Here it opens an interactive bash shell by default.
+# Codespaces replaces this with its own VS Code terminal, but defining
+# CMD makes the image usable with plain "docker run" too.
+# (BHB Ch. 1 — bash is the interpreter that reads and executes our commands).
 CMD ["/usr/bin/bash"]
-
-
-
-
