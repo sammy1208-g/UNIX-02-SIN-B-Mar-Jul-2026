@@ -250,6 +250,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # cambiamos a bash por si agregamos más instrucciones con sintaxis
 # moderna (arrays, [[ ]], etc.).
 
+
+# (Samantha): Docker uses /bin/sh by default, a very basic shell.
+# Switching to bash is like upgrading from a basic calculator to a
+# scientific one: same idea, but way more features available.
+# (BHB Ch. 1 — bash is the shell the whole book is built around;
+# it adds features that /bin/sh simply doesn't have, like arrays
+# and the [[ ]] syntax for conditions).
 SHELL ["/bin/bash", "-c"]
 
 
@@ -260,6 +267,11 @@ SHELL ["/bin/bash", "-c"]
 # /workspaces/<nombre-del-repo>. Establecer /workspaces aquí hace que las
 # terminales se abran cerca de nuestros archivos del curso.
 
+# # (Samantha): This sets where my terminal opens when I enter the container,
+# like setting a default folder in a file explorer.
+# Codespaces puts my repo at /workspaces/<repo-name>, so starting here
+# means I'm always right next to my course files without needing to cd.
+# (BHB Ch. 1 — PWD is the env var that always holds the current directory).
 WORKDIR /workspaces
 
 # Configuración de Git para el contenedor:
