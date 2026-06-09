@@ -23,6 +23,18 @@
 # En lugar de partir de cero, partimos de la imagen oficial de Kali Linux
 # en su versión "rolling" (actualización continua, siempre al día).
 # Todo lo que instalemos más abajo se apila ENCIMA de esta base.
+
+# (Samantha): Think of layers like a stack of transparent slides.
+# Docker caches each layer separately. If I only change line 50,
+# Docker reuses layers 1-49 from cache and only rebuilds from line 50 down.
+# That's why FROM and ENV go first, they almost never change.
+# (BHB Ch. 3 — understanding Docker layers keeps images small and fast).
+
+# (Samantha): This is like choosing which "template" our container starts from.
+# Kali Linux is a security-focused distro that comes pre-configured for
+# hacking labs; exactly what we need for this course.
+# "rolling" means it always has the latest package versions available.
+# (BHB Ch. 3 — Kali is the recommended lab OS for penetration testing).
 FROM kalilinux/kali-rolling:latest
 
 
