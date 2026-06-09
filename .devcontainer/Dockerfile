@@ -48,6 +48,7 @@ FROM kalilinux/kali-rolling:latest
 #
 # La barra invertida "\" al final de cada línea significa "esto continúa
 # en la línea siguiente". Solo es para legibilidad.
+
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=es_ES.UTF-8 \
     LC_ALL=es_ES.UTF-8 \
@@ -171,6 +172,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  # --- Después de instalar, activamos el idioma español ---
  # sed busca "# es_ES.UTF-8" en /etc/locale.gen y le quita el "#" para
  # activar esa línea. Luego locale-gen compila los archivos de idioma.
+
  && sed -i 's/# es_ES.UTF-8/es_ES.UTF-8/' /etc/locale.gen \
  && locale-gen \
  \
@@ -188,6 +190,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Por defecto Docker usa /bin/sh (un shell más limitado y antiguo). Lo
 # cambiamos a bash por si agregamos más instrucciones con sintaxis
 # moderna (arrays, [[ ]], etc.).
+
 SHELL ["/bin/bash", "-c"]
 
 
@@ -197,6 +200,7 @@ SHELL ["/bin/bash", "-c"]
 # Codespaces siempre monta el código del repositorio en
 # /workspaces/<nombre-del-repo>. Establecer /workspaces aquí hace que las
 # terminales se abran cerca de nuestros archivos del curso.
+
 WORKDIR /workspaces
 
 # Configuración de Git para el contenedor:
@@ -206,6 +210,7 @@ WORKDIR /workspaces
 # - pull.rebase false: merge por defecto al hacer pull (más intuitivo)
 # - git lfs install --system: registra los hooks de LFS globalmente para
 #   que, si un repo los necesita, funcionen sin sorpresas.
+
 RUN git config --system --add safe.directory '*' \
  && git config --system init.defaultBranch main \
  && git config --system pull.rebase false \
@@ -219,14 +224,25 @@ RUN git config --system --add safe.directory '*' \
 # definida para que la imagen sea usable también con Docker puro.
 # Prompt del curso para bash
 
-RUN chsh -s /usr/bin/zsh root
+RUN chsh -s /usr/bin/bash root
 
-RUN cat >> /root/.zshrc <<'EOF'
-
-PROMPT='%F{cyan}[Samantha-Chamorro]%f %F{yellow}%1~%f %(?.%F{green}✓.%F{red}✗ %?)%f %# '
+RUN cat >> /root/.bashrc <<'EOF'
+__set_prompt(){
+    local ec=$?
+    local mark
+    if [ $ec -eq 0 ];then
+       mark='\[\e[32m\]✓\[\e[0m\]'
+    else
+        mark="\[\e[31m\]✗ $ec\[\e[0m\]"
+    fi
+    PS1="\[\e[36m\][Samantha-Chamorro]\[\e[0m\] \[\e[33m\]\W\[\e[0m\] $mark \$ "
+}
+PROMPT_COMMAND=__set_prompt
 EOF
 
-CMD ["/usr/bin/zsh"]
+
+CMD ["/usr/bin/bash"]
+
 
 
 
