@@ -219,6 +219,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  # sed busca "# es_ES.UTF-8" en /etc/locale.gen y le quita el "#" para
  # activar esa línea. Luego locale-gen compila los archivos de idioma.
 
+
+ # (Samantha): sed edits /etc/locale.gen in-place (-i flag).
+ # The Spanish locale line in /etc/locale.gen is "switched off"
+ # with a # comment. sed removes that # to turn it on, like flipping a
+ # switch. Then locale-gen compiles it so the system actually uses Spanish.
+ # (BHB Ch. 2 — sed edits text streams without opening any editor,
+ # perfect for automated find-and-replace inside build scripts).
  && sed -i 's/# es_ES.UTF-8/es_ES.UTF-8/' /etc/locale.gen \
  && locale-gen \
  \
@@ -226,6 +233,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  # apt deja archivos de caché que ya no necesitamos después de instalar.
  # Borrarlos aquí (en el mismo RUN) hace la capa final más pequeña.
  # Si los borráramos en otro RUN, seguirían ocupando en la capa anterior.
+
+ # (Samantha): After installing, apt leaves downloaded package files in cache.
+ # We delete them in the SAME RUN to keep this layer small.
+ # If we ran rm -rf in a separate RUN, Docker would still keep those
+ # files in the previous layer, the image would stay big anyway.
+ # Cleanup must always happen in the same RUN as the install (BHB Ch. 3).
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
