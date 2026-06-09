@@ -61,6 +61,12 @@ FROM kalilinux/kali-rolling:latest
 # La barra invertida "\" al final de cada línea significa "esto continúa
 # en la línea siguiente". Solo es para legibilidad.
 
+# (Samantha): These are permanent environment variables baked into the image.
+# In Bash, env vars are inherited by every child process, same here.
+# DEBIAN_FRONTEND=noninteractive  -->  apt won't ask questions during build
+# LANG/LC_ALL=es_ES.UTF-8 --> Spanish language + characters like ñ, á work
+# TERM=xterm-256color -->  programs like vim know they can display 256 colors
+# (BHB Ch. 1 — env vars are key/value pairs the shell passes to every program).
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=es_ES.UTF-8 \
     LC_ALL=es_ES.UTF-8 \
