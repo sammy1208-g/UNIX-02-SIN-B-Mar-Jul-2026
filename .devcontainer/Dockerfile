@@ -80,6 +80,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # normales (no-root) deben poder capturar paquetes. Como en el contenedor
 # siempre somos root, respondemos "false" POR ADELANTADO usando
 # debconf-set-selections para que no detenga el build esperando input.
+
+# (Samantha): During a Docker build nobody is at the keyboard.
+# Wireshark's installer normally PAUSES and asks a yes/no question.
+# This pre-answers that question with "false" using debconf-set-selections
+# so the build never hangs waiting for input that will never come.
+# The pipe | sends echo's output as stdin to debconf-set-selections.
+# (BHB Ch. 1 — pipes connect stdout of one command to stdin of another).
 RUN echo "wireshark-common wireshark-common/install-setuid boolean false" \
     | debconf-set-selections
 
