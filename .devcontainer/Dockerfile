@@ -282,6 +282,15 @@ WORKDIR /workspaces
 # - git lfs install --system: registra los hooks de LFS globalmente para
 #   que, si un repo los necesita, funcionen sin sorpresas.
 
+
+# (Samantha): Before using Git inside the container we need to configure it,
+# otherwise it throws warnings and errors.
+# BHB Ch. 3 uses git clone to download the lab repo, these settings
+# make sure Git works cleanly in a container environment.
+#   safe.directory '*'    --> No "dubious ownership" errors on mounted repos
+#   init.defaultBranch main --> new repos start on main, not master
+#   pull.rebase false    --> Git pull merges instead of rebasing
+#   git lfs install      --> Enables large file support globally
 RUN git config --system --add safe.directory '*' \
  && git config --system init.defaultBranch main \
  && git config --system pull.rebase false \
