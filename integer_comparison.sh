@@ -1,6 +1,6 @@
 #!/bin/bash
-VARIABLE_ONE="10"
-VARIABLE_TWO="20"
+VARIABLE_ONE="20"
+VARIABLE_TWO="10"
 
 if [[ "${VARIABLE_ONE}" -gt "${VARIABLE_TWO}" ]]; then
  echo "${VARIABLE_ONE} is greater than ${VARIABLE_TWO}."
