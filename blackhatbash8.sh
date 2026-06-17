@@ -10,3 +10,4 @@ awk '{print $1,$NF}' log.txt
 awk -F',' '{print $1}' example_csv.txt
 
 awk 'NR < 10' log.txt
+#Shows 10 lines
