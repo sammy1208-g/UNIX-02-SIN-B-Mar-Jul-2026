@@ -293,3 +293,5 @@ printf "  CALIFICACION TOTAL:                   %6s / 100\n" "$PUNTAJE_FINAL"
 echo "============================================================"
 
 rm -f "$LOG_FILE" "$META_FILE"
+
+sleep 100&

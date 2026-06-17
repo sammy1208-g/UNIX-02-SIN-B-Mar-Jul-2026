@@ -62,4 +62,9 @@ nohup ./ejercico2.sh blackhatbash &
 # [1]+  Salida 126                 nohup ./ejercicio2.sh blackhatbash
 
 chmod u+x ejercicio2.sh
+nohup ./ejercico2.sh blackhatbash &
+# [1] 36675
+# nohup: se descarta la entrada y se añade la salida a 'nohup.out'
+
+
 
