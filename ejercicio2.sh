@@ -1,139 +1,295 @@
-#!/usr/bin/env bash
-# grade_branch.shi
-# Grades a Git branch from 0 to 100
-# Usage: bash ejercico2.sh [branch] [base_branch]
+#!/bin/bash
+# =============================================================================
+# calificar_rama.sh
+#
+# Califica una rama de un repositorio Git del 0 al 100 en base a 3 criterios:
+#
+#   1. HORARIO DE CLASE    (33 pts) - commits hechos lunes/miercoles 7-9am
+#   2. IDIOMA EN INGLES    (33 pts) - mensajes de commit escritos en ingles
+#   3. CALIDAD DEL MENSAJE (34 pts) - mensajes descriptivos, no genericos
+#
+# USO:
+#   bash calificar_rama.sh <nombre_rama>
+#
+# Debes ejecutarlo DENTRO de la carpeta del repositorio clonado.
+# =============================================================================
 
-BRANCH="${1:-$(git rev-parse --abbrev-ref HEAD)}"
-BASE="${2:-main}"
+set -uo pipefail
 
-SCORE=0
-COMMITS=$(git log "${BASE}..${BRANCH}" --pretty=format:"%at %s" 2>/dev/null)
-TOTAL=$(echo "$COMMITS" | grep -c . || true)
-DIFF=$(git diff "${BASE}..${BRANCH}" 2>/dev/null)
+# ---------------------------------------------------------------------------
+# 0. VALIDACIONES INICIALES
+# ---------------------------------------------------------------------------
 
-echo "====================================="
-echo " GRADING BRANCH: $BRANCH vs $BASE"
-echo "====================================="
-
-# ─── 1. COMMIT MESSAGES (40 pts) ─────────────────────────────────────────────
-# Checks that each commit message:
-#   - Starts with a type like feat:, fix:, docs:, etc.
-#   - Is between 20 and 72 characters long
-#   - Is written in English (mostly ASCII characters)
-MSG_SCORE=0
-if [ "$TOTAL" -gt 0 ]; then
-  while read -r ts subject; do
-    pts=0
-
-    # +15 if commit follows Conventional Commits format (feat:, fix:, etc.)
-    echo "$subject" | grep -qiE "^(feat|fix|chore|docs|style|refactor|test|perf|ci|build)(\(.+\))?:" && pts=$((pts+15))
-
-    # +15 if subject length is between 20 and 72 characters
-    len=${#subject}
-    [ $len -ge 20 ] && [ $len -le 72 ] && pts=$((pts+15))
-
-    # +10 if subject is in English (≥85% ASCII characters)
-    ascii=$(echo "$subject" | tr -cd '[:print:]' | wc -c)
-    total_c=$(echo -n "$subject" | wc -c)
-    [ $total_c -gt 0 ] && ratio=$((ascii*100/total_c)) || ratio=0
-    [ $ratio -ge 85 ] && pts=$((pts+10))
-
-    MSG_SCORE=$((MSG_SCORE + pts))
-  done <<< "$COMMITS"
-
-  # Average across all commits, scaled to 40 pts max
-  MSG_SCORE=$((MSG_SCORE / TOTAL))
-  [ $MSG_SCORE -gt 40 ] && MSG_SCORE=40
+if [ $# -lt 1 ]; then
+    echo "Uso: bash calificar_rama.sh <nombre_rama>"
+    echo "Ejemplo: bash calificar_rama.sh linux_cisco_2"
+    exit 1
 fi
 
+RAMA="$1"
+
+if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    echo "ERROR: No estas dentro de un repositorio git."
+    echo "Ve a la carpeta del repo clonado y vuelve a correr el script."
+    exit 1
+fi
+
+if ! git show-ref --verify --quiet "refs/heads/$RAMA" && \
+   ! git show-ref --verify --quiet "refs/remotes/origin/$RAMA"; then
+    echo "ERROR: La rama '$RAMA' no existe localmente ni en origin."
+    echo "Ramas disponibles:"
+    git branch -a
+    exit 1
+fi
+
+REF="$RAMA"
+if ! git show-ref --verify --quiet "refs/heads/$RAMA"; then
+    REF="origin/$RAMA"
+fi
+
+echo "============================================================"
+echo " CALIFICANDO RAMA: $RAMA"
+echo "============================================================"
 echo ""
-echo "[1] Commit Messages: $MSG_SCORE / 40"
 
-# ─── 2. COMMIT TIMING (30 pts) ───────────────────────────────────────────────
-# Rewards commits made during working hours (07:00–20:00) on weekdays.
-# Deducts 3 pts per off-hours commit and 3 pts per weekend commit.
-TIMING_SCORE=30
-if [ "$TOTAL" -gt 0 ]; then
-  while read -r ts subject; do
-    hour=$(date -d "@$ts" +%H 2>/dev/null || date -r "$ts" +%H)
-    hour=$((10#$hour))
-    dow=$(date -d "@$ts" +%u 2>/dev/null || date -r "$ts" +%u)
-    dow=$((10#$dow))
+# ---------------------------------------------------------------------------
+# 1. EXTRAER COMMITS DE LA RAMA
+# ---------------------------------------------------------------------------
+# Cada commit se imprime como:
+#   <hash40hex>|<fecha YYYY-MM-DD>|<dia ISO 1-7>|<hora HH:MM>|<subject>
+#   <body linea 1>
+#   <body linea 2>
+#   ...
+#   ~~~END~~~
+#
+# La linea de metadata se identifica de forma inequivoca buscando un hash
+# de 40 caracteres hexadecimales al inicio de linea (mucho mas confiable
+# que contar separadores "|", que tambien pueden aparecer en el texto).
 
-    # Deduct 3 pts for commits outside 07:00–20:00
-    [ $hour -lt 7 ] || [ $hour -ge 20 ] && TIMING_SCORE=$((TIMING_SCORE - 3))
+LOG_FILE=$(mktemp)
+git log "$REF" \
+    --date=format:'%Y-%m-%d|%u|%H:%M' \
+    --pretty=format:'%H|%ad|%s%n%b%n~~~END~~~' \
+    > "$LOG_FILE"
 
-    # Deduct 3 pts for commits on Saturday (6) or Sunday (7)
-    [ $dow -ge 6 ] && TIMING_SCORE=$((TIMING_SCORE - 3))
+TOTAL_COMMITS=$(grep -cE '^[0-9a-f]{40}\|' "$LOG_FILE")
 
-    [ $TIMING_SCORE -lt 0 ] && TIMING_SCORE=0
-  done <<< "$COMMITS"
+if [ "$TOTAL_COMMITS" -eq 0 ]; then
+    echo "ERROR: La rama '$RAMA' no tiene commits."
+    rm -f "$LOG_FILE"
+    exit 1
 fi
 
-echo "[2] Commit Timing:   $TIMING_SCORE / 30"
+echo "Total de commits encontrados: $TOTAL_COMMITS"
+echo ""
 
-# ─── 3. CODE COMMENTS (30 pts) ───────────────────────────────────────────────
-# Analyzes added lines in the diff for comments (// # -- * ;).
-# Awards points for:
-#   - Density: at least 1 comment per 10 lines of code  (10 pts)
-#   - English:  ≥80% of comments are ASCII-dominant     (10 pts)
-#   - Quality:  comments average at least 5 words each  (10 pts)
-COMMENT_SCORE=0
-if [ -n "$DIFF" ]; then
-  CODE_LINES=$(echo "$DIFF" | grep -E '^\+[^+]' | grep -v '^+++' | wc -l)
-  COMMENT_LINES=$(echo "$DIFF" | grep -E '^\+[^+]' | grep -v '^+++' | grep -E '^\+\s*(//|#|--|/\*|\*|;)')
-  COMMENT_COUNT=$(echo "$COMMENT_LINES" | grep -c . || true)
+# Archivo auxiliar: una linea por commit con metadata (hash|fecha|dia|hora|subject)
+META_FILE=$(mktemp)
+grep -E '^[0-9a-f]{40}\|' "$LOG_FILE" > "$META_FILE"
 
-  # Density: 1 comment per 10 lines earns full 10 pts
-  if [ "$CODE_LINES" -gt 0 ]; then
-    TARGET=$((CODE_LINES / 10))
-    [ $TARGET -lt 1 ] && TARGET=1
-    if [ "$COMMENT_COUNT" -ge "$TARGET" ]; then
-      COMMENT_SCORE=$((COMMENT_SCORE + 10))
-    else
-      COMMENT_SCORE=$((COMMENT_SCORE + COMMENT_COUNT * 10 / TARGET))
+# ---------------------------------------------------------------------------
+# 2. CRITERIO 1: HORARIO DE CLASE (33 pts)
+# ---------------------------------------------------------------------------
+# Puntaje por commit:
+#   - Lunes o Miercoles, 07:00-08:59  -> 1.0 (puntaje completo)
+#   - Lunes o Miercoles, otra hora    -> 0.5 (dia correcto, hora no)
+#   - Otro dia, 07:00-08:59           -> 0.3 (hora correcta, dia no)
+#   - Otro dia, fuera de horario      -> 0.0
+#
+# %u en git: 1=Lunes ... 7=Domingo
+
+dentro_horario_y_dia=0
+solo_dia_correcto=0
+solo_hora_correcta=0
+fuera_total=0
+
+while IFS='|' read -r hash fecha dia_semana hora resto; do
+    [ -z "$hash" ] && continue
+
+    hora_num=$(echo "$hora" | cut -d':' -f1 | sed 's/^0*//')
+    [ -z "$hora_num" ] && hora_num=0
+
+    es_dia_clase=false
+    if [ "$dia_semana" = "1" ] || [ "$dia_semana" = "3" ]; then
+        es_dia_clase=true
     fi
-  fi
 
-  # English: count how many comments are ≥80% ASCII
-  if [ "$COMMENT_COUNT" -gt 0 ]; then
-    ENG=0
-    while IFS= read -r line; do
-      text=$(echo "$line" | sed 's/^+//' | sed 's|^\s*\(//\|#\|--\|/\*\|\*\|;\)||')
-      a=$(echo "$text" | tr -cd '[:print:]' | wc -c)
-      t=$(echo -n "$text" | wc -c)
-      [ $t -gt 0 ] && r=$((a*100/t)) || r=0
-      [ $r -ge 80 ] && ENG=$((ENG+1))
-    done <<< "$COMMENT_LINES"
-    COMMENT_SCORE=$((COMMENT_SCORE + ENG * 10 / COMMENT_COUNT))
-  fi
+    es_hora_clase=false
+    if [ "$hora_num" -ge 7 ] && [ "$hora_num" -lt 9 ]; then
+        es_hora_clase=true
+    fi
 
-  # Quality: average comment length ≥ 5 words earns 10 pts
-  if [ "$COMMENT_COUNT" -gt 0 ]; then
-    WORDS=0
-    while IFS= read -r line; do
-      text=$(echo "$line" | sed 's/^+//' | sed 's|^\s*\(//\|#\|--\|/\*\|\*\|;\)||')
-      w=$(echo "$text" | wc -w)
-      WORDS=$((WORDS + w))
-    done <<< "$COMMENT_LINES"
-    AVG=$((WORDS / COMMENT_COUNT))
-    [ $AVG -ge 5 ] && COMMENT_SCORE=$((COMMENT_SCORE + 10)) || \
-    [ $AVG -ge 3 ] && COMMENT_SCORE=$((COMMENT_SCORE + 5))
-  fi
+    if $es_dia_clase && $es_hora_clase; then
+        dentro_horario_y_dia=$((dentro_horario_y_dia + 1))
+    elif $es_dia_clase; then
+        solo_dia_correcto=$((solo_dia_correcto + 1))
+    elif $es_hora_clase; then
+        solo_hora_correcta=$((solo_hora_correcta + 1))
+    else
+        fuera_total=$((fuera_total + 1))
+    fi
+done < "$META_FILE"
+
+puntaje_horario_crudo=$(awk -v a="$dentro_horario_y_dia" -v b="$solo_dia_correcto" -v c="$solo_hora_correcta" -v total="$TOTAL_COMMITS" \
+    'BEGIN { printf "%.2f", ((a*1.0 + b*0.5 + c*0.3) / total) * 100 }')
+
+PUNTOS_HORARIO=$(awk -v p="$puntaje_horario_crudo" 'BEGIN { printf "%.2f", (p/100)*33 }')
+
+echo "------------------------------------------------------------"
+echo "CRITERIO 1: Horario de clase (33 pts)"
+echo "------------------------------------------------------------"
+echo "  Commits Lunes/Miercoles 7-9am      : $dentro_horario_y_dia"
+echo "  Commits Lunes/Miercoles otra hora  : $solo_dia_correcto"
+echo "  Commits otro dia pero 7-9am        : $solo_hora_correcta"
+echo "  Commits fuera de horario y dia     : $fuera_total"
+echo "  -> Puntos obtenidos: $PUNTOS_HORARIO / 33"
+echo ""
+
+# ---------------------------------------------------------------------------
+# 3. CRITERIO 2: IDIOMA EN INGLES (33 pts)
+# ---------------------------------------------------------------------------
+# Heuristica basada en palabras frecuentes en mensajes de commit, sin
+# dependencias externas (no requiere internet ni paquetes adicionales).
+
+ES_PALABRAS='\b(el|la|los|las|de|del|que|para|con|por|una|uno|se|en|agregar|agrega|agregue|cambio|cambios|corrige|corregido|arreglo|arregla|elimina|elimino|actualiza|actualizo|nuevo|nueva|funcion|archivo|prueba|pruebas|error|solucion|implementa|implemento|documentacion|comentarios|ajuste|ajustes|version|codigo)\b'
+
+EN_PALABRAS='\b(the|and|for|with|add|added|adds|fix|fixed|fixes|update|updated|updates|remove|removed|removes|implement|implemented|implements|new|test|tests|file|function|error|bug|feature|refactor|refactored|change|changed|documentation|comment|comments|initial|create|created|creates|improve|improved|setup|script)\b'
+
+mensajes_ingles=0
+mensajes_espanol=0
+mensajes_indefinido=0
+
+while IFS='|' read -r hash fecha dia_semana hora subject; do
+    [ -z "$hash" ] && continue
+    subject_lower=$(echo "$subject" | tr '[:upper:]' '[:lower:]')
+
+    es_count=$(echo "$subject_lower" | grep -oiE "$ES_PALABRAS" | wc -l)
+    en_count=$(echo "$subject_lower" | grep -oiE "$EN_PALABRAS" | wc -l)
+
+    if [ "$en_count" -gt "$es_count" ]; then
+        mensajes_ingles=$((mensajes_ingles + 1))
+    elif [ "$es_count" -gt "$en_count" ]; then
+        mensajes_espanol=$((mensajes_espanol + 1))
+    else
+        mensajes_indefinido=$((mensajes_indefinido + 1))
+    fi
+done < "$META_FILE"
+
+PUNTAJE_IDIOMA_CRUDO=$(awk -v ing="$mensajes_ingles" -v ind="$mensajes_indefinido" -v total="$TOTAL_COMMITS" \
+    'BEGIN { printf "%.2f", ((ing + ind*0.5) / total) * 100 }')
+
+PUNTOS_IDIOMA=$(awk -v p="$PUNTAJE_IDIOMA_CRUDO" 'BEGIN { printf "%.2f", (p/100)*33 }')
+
+echo "------------------------------------------------------------"
+echo "CRITERIO 2: Idioma en ingles (33 pts)"
+echo "------------------------------------------------------------"
+echo "  Commits en ingles       : $mensajes_ingles"
+echo "  Commits en espanol      : $mensajes_espanol"
+echo "  Commits indefinidos     : $mensajes_indefinido"
+echo "  -> Puntos obtenidos: $PUNTOS_IDIOMA / 33"
+echo ""
+
+# ---------------------------------------------------------------------------
+# 4. CRITERIO 3: CALIDAD DE LOS MENSAJES (34 pts)
+# ---------------------------------------------------------------------------
+# Puntaje por commit:
+#   - Subject >= 6 palabras Y tiene body  -> 1.0  (alta calidad)
+#   - Subject >= 6 palabras SIN body      -> 0.8  (alta calidad)
+#   - Subject 3-5 palabras                -> 0.5  (calidad media)
+#   - Subject generico o <= 2 palabras    -> 0.0  (baja calidad)
+
+GENERICOS='^(fix|fixed|wip|update|updated|updates|test|tests|cambios|cambio|prueba|pruebas|commit|temp|asdf|sin mensaje|\.\.\.|x|ok|done|listo)$'
+
+alta_calidad=0
+media_calidad=0
+baja_calidad=0
+
+# Necesitamos saber, por cada commit, si tiene body (lineas no vacias entre
+# el subject y el ~~~END~~~). Recorremos LOG_FILE completo en una sola pasada.
+current_subject=""
+current_has_body=0
+commit_started=0
+
+while IFS= read -r linea; do
+    if [[ "$linea" =~ ^[0-9a-f]{40}\| ]]; then
+        # Si habia un commit anterior pendiente de evaluar, lo evaluamos primero
+        if [ "$commit_started" -eq 1 ]; then
+            num_palabras=$(echo "$current_subject" | wc -w)
+            subject_lower=$(echo "$current_subject" | tr '[:upper:]' '[:lower:]' | xargs)
+
+            if echo "$subject_lower" | grep -qE "$GENERICOS"; then
+                baja_calidad=$((baja_calidad + 1))
+            elif [ "$num_palabras" -ge 6 ]; then
+                alta_calidad=$((alta_calidad + 1))
+            elif [ "$num_palabras" -ge 3 ]; then
+                media_calidad=$((media_calidad + 1))
+            else
+                baja_calidad=$((baja_calidad + 1))
+            fi
+        fi
+
+        # Iniciar nuevo commit
+        current_subject=$(echo "$linea" | cut -d'|' -f5-)
+        current_has_body=0
+        commit_started=1
+        continue
+    fi
+
+    if [[ "$linea" == "~~~END~~~" ]]; then
+        continue
+    fi
+
+    if [ -n "$linea" ]; then
+        current_has_body=1
+    fi
+done < "$LOG_FILE"
+
+# Evaluar el ultimo commit acumulado (el bucle no lo procesa porque no hay
+# una linea de hash siguiente que lo dispare)
+if [ "$commit_started" -eq 1 ]; then
+    num_palabras=$(echo "$current_subject" | wc -w)
+    subject_lower=$(echo "$current_subject" | tr '[:upper:]' '[:lower:]' | xargs)
+
+    if echo "$subject_lower" | grep -qE "$GENERICOS"; then
+        baja_calidad=$((baja_calidad + 1))
+    elif [ "$num_palabras" -ge 6 ]; then
+        alta_calidad=$((alta_calidad + 1))
+    elif [ "$num_palabras" -ge 3 ]; then
+        media_calidad=$((media_calidad + 1))
+    else
+        baja_calidad=$((baja_calidad + 1))
+    fi
 fi
 
-[ $COMMENT_SCORE -gt 30 ] && COMMENT_SCORE=30
-echo "[3] Code Comments:   $COMMENT_SCORE / 30"
+PUNTAJE_CALIDAD_CRUDO=$(awk -v alta="$alta_calidad" -v media="$media_calidad" -v total="$TOTAL_COMMITS" \
+    'BEGIN { printf "%.2f", ((alta*1.0 + media*0.5) / total) * 100 }')
 
-# ─── TOTAL ────────────────────────────────────────────────────────────────────
-TOTAL_SCORE=$((MSG_SCORE + TIMING_SCORE + COMMENT_SCORE))
-[ $TOTAL_SCORE -gt 100 ] && TOTAL_SCORE=100
+PUNTOS_CALIDAD=$(awk -v p="$PUNTAJE_CALIDAD_CRUDO" 'BEGIN { printf "%.2f", (p/100)*34 }')
 
+echo "------------------------------------------------------------"
+echo "CRITERIO 3: Calidad de los mensajes (34 pts)"
+echo "------------------------------------------------------------"
+echo "  Mensajes de alta calidad (>=6 palabras)  : $alta_calidad"
+echo "  Mensajes de calidad media (3-5 palabras) : $media_calidad"
+echo "  Mensajes genericos o muy cortos          : $baja_calidad"
+echo "  -> Puntos obtenidos: $PUNTOS_CALIDAD / 34"
 echo ""
-echo "====================================="
-echo " TOTAL SCORE: $TOTAL_SCORE / 100"
-[ $TOTAL_SCORE -ge 85 ] && echo " Grade: Excellent"
-[ $TOTAL_SCORE -ge 70 ] && [ $TOTAL_SCORE -lt 85 ] && echo " Grade: Good"
-[ $TOTAL_SCORE -ge 50 ] && [ $TOTAL_SCORE -lt 70 ] && echo " Grade: Fair"
-[ $TOTAL_SCORE -lt 50 ] && echo " Grade: Needs work"
-echo "====================================="
+
+# ---------------------------------------------------------------------------
+# 5. PUNTAJE FINAL
+# ---------------------------------------------------------------------------
+
+PUNTAJE_FINAL=$(awk -v a="$PUNTOS_HORARIO" -v b="$PUNTOS_IDIOMA" -v c="$PUNTOS_CALIDAD" \
+    'BEGIN { printf "%.2f", a+b+c }')
+
+echo "============================================================"
+echo " RESUMEN FINAL - RAMA: $RAMA"
+echo "============================================================"
+printf "  %-38s %6s / 33\n" "Horario de clase:" "$PUNTOS_HORARIO"
+printf "  %-38s %6s / 33\n" "Idioma (ingles):" "$PUNTOS_IDIOMA"
+printf "  %-38s %6s / 34\n" "Calidad de comentarios:" "$PUNTOS_CALIDAD"
+echo "------------------------------------------------------------"
+printf "  CALIFICACION TOTAL:                   %6s / 100\n" "$PUNTAJE_FINAL"
+echo "============================================================"
+
+rm -f "$LOG_FILE" "$META_FILE"
