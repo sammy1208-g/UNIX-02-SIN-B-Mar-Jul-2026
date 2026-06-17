@@ -54,3 +54,12 @@ fg %1
 
 bg %1
 # [1]+ sleep 100 &
+
+nohup ./ejercico2.sh blackhatbash &
+# [1] 29709
+# nohup: se descarta la entrada y se añade la salida a 'nohup.out'
+# nohup: fallo al ejecutar la orden './ejercicio2.sh blackhatbash': Permiso denegado
+# [1]+  Salida 126                 nohup ./ejercicio2.sh blackhatbash
+
+chmod u+x ejercicio2.sh
+

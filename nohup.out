@@ -1,0 +1,42 @@
+Uso: bash calificar_rama.sh <nombre_rama>
+Ejemplo: bash calificar_rama.sh linux_cisco_2
+============================================================
+ CALIFICANDO RAMA: blackhatbash
+============================================================
+
+Total de commits encontrados: 94
+
+------------------------------------------------------------
+CRITERIO 1: Horario de clase (33 pts)
+------------------------------------------------------------
+  Commits Lunes/Miercoles 7-9am      : 0
+  Commits Lunes/Miercoles otra hora  : 86
+  Commits otro dia pero 7-9am        : 0
+  Commits fuera de horario y dia     : 8
+  -> Puntos obtenidos: 15.09 / 33
+
+------------------------------------------------------------
+CRITERIO 2: Idioma en ingles (33 pts)
+------------------------------------------------------------
+  Commits en ingles       : 41
+  Commits en espanol      : 0
+  Commits indefinidos     : 53
+  -> Puntos obtenidos: 23.70 / 33
+
+------------------------------------------------------------
+CRITERIO 3: Calidad de los mensajes (34 pts)
+------------------------------------------------------------
+  Mensajes de alta calidad (>=6 palabras)  : 7
+  Mensajes de calidad media (3-5 palabras) : 55
+  Mensajes genericos o muy cortos          : 32
+  -> Puntos obtenidos: 12.48 / 34
+
+============================================================
+ RESUMEN FINAL - RAMA: blackhatbash
+============================================================
+  Horario de clase:                       15.09 / 33
+  Idioma (ingles):                        23.70 / 33
+  Calidad de comentarios:                 12.48 / 34
+------------------------------------------------------------
+  CALIFICACION TOTAL:                    51.27 / 100
+============================================================
