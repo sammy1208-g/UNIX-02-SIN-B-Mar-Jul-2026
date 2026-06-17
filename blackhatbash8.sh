@@ -68,3 +68,6 @@ nohup ./ejercico2.sh blackhatbash &
 
 
 
+nohup ./ejercico2.sh blackhatbash &
+ps -aux 
+# Sleep file
