@@ -14,3 +14,8 @@ awk 'NR < 10' log.txt
 #Shows 10 lines
 
 grep "42.236.10.117" log.txt | awk '{print $7}'
+
+
+sed 's/Mozilla/Godzilla/g' log.txt
+
+sed 's/Mozilla/Godzilla/g' log.txt > newlog.txt
